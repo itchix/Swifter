@@ -106,7 +106,7 @@ public extension Swifter {
             let queryUrl = URL(string: query, relativeTo: TwitterURL.oauth.url)!
 			
 	    if webView != nil {
-                webView!.load(URLRequest(url: queryURL))
+                webView!.load(URLRequest(url: queryUrl))
             } else if let delegate = safariDelegate ?? (presenting as? SFSafariViewControllerDelegate) {
                 let safariView = SFSafariViewController(url: queryUrl)
                 safariView.delegate = delegate

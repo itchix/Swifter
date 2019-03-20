@@ -28,6 +28,7 @@ import Foundation
 #if os(iOS)
     import UIKit
     import SafariServices
+    import WebKit
 #elseif os(macOS)
     import AppKit
 #endif
@@ -79,7 +80,8 @@ public extension Swifter {
     #if os(iOS)
     public func authorize(withCallback callbackURL: URL,
 						  presentingFrom presenting: UIViewController?,
-						  forceLogin: Bool = false,
+						  forceLogin: Bool = false, 
+			  			  inEmbedded webView :WKWebView? = nil,
 						  safariDelegate: SFSafariViewControllerDelegate? = nil,
 						  success: TokenSuccessHandler?,
 						  failure: FailureHandler? = nil) {
@@ -103,7 +105,9 @@ public extension Swifter {
 			let query = "oauth/authorize?oauth_token=\(token!.key)\(forceLogin)"
             let queryUrl = URL(string: query, relativeTo: TwitterURL.oauth.url)!
 			
-            if let delegate = safariDelegate ?? (presenting as? SFSafariViewControllerDelegate) {
+	    if webView != nil {
+                webView!.load(URLRequest(url: queryURL))
+            } else if let delegate = safariDelegate ?? (presenting as? SFSafariViewControllerDelegate) {
                 let safariView = SFSafariViewController(url: queryUrl)
                 safariView.delegate = delegate
                 safariView.modalTransitionStyle = .coverVertical
